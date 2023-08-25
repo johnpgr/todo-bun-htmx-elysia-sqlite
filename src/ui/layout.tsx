@@ -11,7 +11,9 @@ export function Layout({ children }: elements.Children) {
       <script src="https://unpkg.com/htmx.org@1.9.5"></script>
       <link href="/styles.css" rel="stylesheet">
     </head>
-  ${children}
+  <body>
+    ${children}
+  </body>
   </html>
 `
 }

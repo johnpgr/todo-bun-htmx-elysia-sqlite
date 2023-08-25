@@ -5,7 +5,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"bun run --watch src/index.tsx\" \"bun run tw:dev\"",
     "tw": "bunx tailwindcss -i ./src/styles.css -o ./dist/styles.css",
-    "tw:dev": "bunx tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch"
+    "tw:dev": "bunx tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@elysiajs/html": "^0.6.0",

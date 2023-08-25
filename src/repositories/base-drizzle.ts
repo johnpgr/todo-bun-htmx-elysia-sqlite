@@ -2,7 +2,7 @@ import { db } from "@/db"
 import { InferInsertModel, InferSelectModel, eq } from "drizzle-orm"
 import { AnySQLiteTable } from "drizzle-orm/sqlite-core"
 import { IBaseRepository } from "./base"
-import { withId } from "@/utils/create-id"
+import { withId } from "@/utils/with-id"
 
 export abstract class DefaultDrizzleRepository<
   Table extends AnySQLiteTable,
@@ -12,13 +12,13 @@ export abstract class DefaultDrizzleRepository<
 {
   constructor(private readonly table: Table) {}
 
-  async add(data: InsertModel): Promise<SelectModel> {
+  async create(data: InsertModel): Promise<SelectModel> {
     return (
       (await db
         .insert(this.table)
         .values(withId(data))
-        .returning()) as unknown as any[]
-    )[0] as SelectModel
+        .returning()) as unknown as SelectModel[]
+    )[0]
   }
 
   async update(id: string, data: InsertModel): Promise<SelectModel> {
@@ -29,31 +29,28 @@ export abstract class DefaultDrizzleRepository<
           .set(data)
           //@ts-expect-error id should exist on every table
           .where(eq(this.table.id, id))
-          .returning()) as unknown as any[]
-      )[0] as unknown as SelectModel
+          .returning()) as unknown as SelectModel[]
+      )[0]
     )
   }
 
-  async getAll(): Promise<SelectModel[]> {
+  async findAll(): Promise<SelectModel[]> {
     return (await db.select().from(this.table)) as unknown as SelectModel[]
   }
 
-  async getById(id: string): Promise<SelectModel | null> {
-    const [found] = await db
-      .select()
-      .from(this.table)
-      //@ts-expect-error id should exist on every table
-      .where(eq(this.table.id, id))
-      .limit(1)
-
-    if (!found) return null
-
-    return found as SelectModel
+  async findById(id: string): Promise<SelectModel | null> {
+    return (
+      (
+        (await db
+          .select()
+          .from(this.table)
+          //@ts-expect-error id should exist on every table
+          .where(eq(this.table.id, id))
+          .limit(1)) as unknown as SelectModel[]
+      )[0] ?? null
+    )
   }
 
-  /**
-   * @throws Error
-   */
   async delete(id: string): Promise<SelectModel> {
     return (
       (
@@ -61,8 +58,8 @@ export abstract class DefaultDrizzleRepository<
           .delete(this.table)
           //@ts-expect-error id should exist on every table
           .where(eq(this.table.id, id))
-          .returning()) as unknown as any[]
-      )[0] as SelectModel
+          .returning()) as unknown as SelectModel[]
+      )[0]
     )
   }
 }

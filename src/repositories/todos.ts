@@ -8,4 +8,8 @@ export class TodoRepository extends DefaultDrizzleRepository<
   typeof todos,
   Todo,
   InsertTodo
-> {}
+> {
+  constructor() {
+    super(todos)
+  }
+}

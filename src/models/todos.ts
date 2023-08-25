@@ -5,12 +5,8 @@ export const todos = sqliteTable("todos", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
   completed: int("completed", { mode: "boolean" }).notNull().default(false),
-  issuedAt: int("issued_at", { mode: "timestamp_ms" })
-    .notNull()
-    .default(new Date()),
-  dueDate: int("due_date", { mode: "timestamp_ms" })
-    .notNull()
-    .default(new Date()),
+  issuedAt: int("issued_at", { mode: "timestamp_ms" }).notNull().defaultNow(),
+  dueDate: int("due_date", { mode: "timestamp_ms" }).notNull().defaultNow(),
 })
 
 export type Todo = InferSelectModel<typeof todos>
