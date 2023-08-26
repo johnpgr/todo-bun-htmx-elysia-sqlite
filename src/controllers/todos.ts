@@ -1,18 +1,17 @@
+import { App } from "@/ctx"
 import {
   MultipleTodoResponseDto,
-  SingleTodoResponseDto,
-  TodoDto,
+  SingleTodoResponseDto
 } from "@/dto/todos"
-import { App } from "@/services/setup"
 import { t } from "elysia"
 
-export const todosController = (app: App) =>
+export const TodosController = (app: App) =>
   app.group("/todos", (router) =>
     router
       .get(
         "/:id",
-        async ({ services, params }) => ({
-          todo: await services.todos.findById(params.id),
+        async ({ ctx, params }) => ({
+          todo: await ctx.todos.findById(params.id),
         }),
         {
           response: SingleTodoResponseDto,
@@ -20,8 +19,8 @@ export const todosController = (app: App) =>
       )
       .get(
         "/all",
-        async ({ services }) => {
-          const todos = await services.todos.findAll()
+        async ({ ctx }) => {
+          const todos = await ctx.todos.findAll()
           return {
             todos,
             todoCount: todos.length,
@@ -33,8 +32,8 @@ export const todosController = (app: App) =>
       )
       .post(
         "/",
-        async ({ services, body }) => ({
-          todo: await services.todos.create({
+        async ({ ctx, body }) => ({
+          todo: await ctx.todos.create ({
             ...body,
             dueDate: new Date(body.dueDate),
           }),
@@ -52,8 +51,8 @@ export const todosController = (app: App) =>
       )
       .put(
         "/:id",
-        async ({ services, params, body }) => ({
-          todo: await services.todos.update(params.id, {
+        async ({ ctx, params, body }) => ({
+          todo: await ctx.todos.update(params.id, {
             ...body,
             dueDate: new Date(body.dueDate),
           }),

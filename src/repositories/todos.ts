@@ -13,5 +13,3 @@ export class TodoRepository extends DefaultDrizzleRepository<
     super(todos)
   }
 }
-
-export const todoRepository = new TodoRepository()
