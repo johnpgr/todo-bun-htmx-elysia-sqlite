@@ -1,19 +1,19 @@
-import { Elysia } from "elysia"
 import { html } from "@elysiajs/html"
-import { Root } from "./pages"
+import { Elysia } from "elysia"
 import elements from "typed-html"
-import { todosController } from "./controllers/todos"
 import { otherController } from "./controllers/other"
+import { todosController } from "./controllers/todos"
+import { Root } from "./pages"
+import { setupServices } from "./services/setup"
 
 const app = new Elysia()
   .use(html())
+  .use(setupServices)
   .get("/styles.css", () => Bun.file("dist/styles.css"))
   .get("/", () => <Root />)
-  .group("api", (group) => group.use(todosController).use(otherController)) // This line breaks the `app` type entirely and I don't know why
-  .listen(3000) as unknown as ReturnType<typeof html> // The manual type cast here is required
+  .group("api", (group) => group.use(todosController).use(otherController))
+  .listen(3000)
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
 )
-
-export type ElysiaApp = typeof app

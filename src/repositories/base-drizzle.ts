@@ -2,7 +2,6 @@ import { db } from "@/db"
 import { InferInsertModel, InferSelectModel, eq } from "drizzle-orm"
 import { AnySQLiteTable } from "drizzle-orm/sqlite-core"
 import { IBaseRepository } from "./base"
-import { withId } from "@/utils/with-id"
 
 export abstract class DefaultDrizzleRepository<
   Table extends AnySQLiteTable,
@@ -16,7 +15,7 @@ export abstract class DefaultDrizzleRepository<
     return (
       (await db
         .insert(this.table)
-        .values(withId(data))
+        .values(data)
         .returning()) as unknown as SelectModel[]
     )[0]
   }

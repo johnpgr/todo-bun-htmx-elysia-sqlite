@@ -7,6 +7,7 @@ const sqlite = new Database("db.sqlite")
 
 const db = drizzle(sqlite, {
   schema,
+  logger: process.env.NODE_ENV === "development",
 })
 
 migrate(db, {
