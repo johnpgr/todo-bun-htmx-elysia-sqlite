@@ -1,12 +1,11 @@
 import Elysia from "elysia"
-import { TodoRepository } from "./repositories/todos"
+import { TaskRepository } from "./repositories/tasks"
 import { db } from "./db"
 
 export const Context = (app: Elysia) =>
-  app
-    .decorate("ctx", {
-      db,
-      todos: new TodoRepository(),
-    })
+  app.decorate("ctx", {
+    db,
+    tasks: new TaskRepository(),
+  })
 
-export type App = ReturnType<typeof Context>
+export type AppContext = ReturnType<typeof Context>

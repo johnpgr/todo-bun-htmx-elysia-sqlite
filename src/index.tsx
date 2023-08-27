@@ -1,19 +1,28 @@
 import { Elysia } from "elysia"
 import elements from "typed-html"
-import { TodosController } from "./controllers/todos"
+import { TasksController } from "./routes/tasks"
 import { Context } from "./ctx"
-import { Html } from "./html"
 import { RequestLogger } from "./logger"
-import { Root } from "./pages"
+import html from "@elysiajs/html"
+import { Layout } from "./components/layout"
+import { Body } from "./components/body"
 
 const app = new Elysia()
   .use(RequestLogger)
-  .use(Html)
+  .use(html())
   .use(Context)
+  .use(TasksController)
   .get("/styles.css", () => Bun.file("dist/styles.css"))
-  .get("/", () => <Root />)
-  .group("api", (group) => group.use(TodosController))
+  .get("/", ({ html }) => {
+    return html(
+      <Layout>
+        <Body />
+      </Layout>,
+    )
+  })
   .listen(3000)
+
+export type App = typeof app
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,

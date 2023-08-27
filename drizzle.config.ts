@@ -2,7 +2,7 @@ import { Config } from "drizzle-kit"
 
 export default {
   dbCredentials: {
-    url: "sqlite://db.sqlite",
+    url: "file:/db.sqlite",
   },
   driver: "libsql",
   out: "drizzle",
